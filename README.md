@@ -1,9 +1,9 @@
 # OAD_Microbiota
----
+
 This repostory contains code related to OAD-microbiota paper.
 
 ## Directory Structure 
----
+
 Figure1, Figure2, ...: Directories including analysis code and plot code
 InputData: Contains the input datasets required to run the analysis
 
