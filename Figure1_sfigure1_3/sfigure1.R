@@ -26,7 +26,7 @@ dir.create("../result/Figure1_sfigure1_3", recursive = T)
 ### plot 
 
 for(i in var){
-  pdf(file = paste0("../result/Figure1_sfigure1_3/", i, "meta.pdf"), width = 10, height = 6)
+  pdf(file = paste0("../result/Figure1_sfigure1_3/sfig1_", i, "meta.pdf"), width = 10, height = 6)
   metaplot(qdat, i)
   dev.off()
 }
