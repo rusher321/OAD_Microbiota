@@ -137,5 +137,5 @@ test2 <- plot_grid(plotlist = test, nrow = 2)
 #### output 
 library(patchwork)
 out <- p1_metfor+p2_metfor
-ggsave(filename = "../result/sFig3_left.pdf", plot = out, device = "pdf", width = 8, height = 8)
-ggsave(filename = "../result/sfig3_right.pdf", plot = test2, device = "pdf", width = 4, height = 6)
+ggsave(filename = "../result/Figure1_sfigure1_3/sFig3_left.pdf", plot = out, device = "pdf", width = 8, height = 8)
+ggsave(filename = "../result/Figure1_sfigure1_3/sfig3_right.pdf", plot = test2, device = "pdf", width = 4, height = 6)
