@@ -8,6 +8,8 @@ This repostory contains code related to OAD-microbiota paper.
  
  **InputData**: Contains the input datasets required to run the analysis
 
+ **Result**: Contains the raw pdf
+
 ## Contact  
 For questions or issues related to the analysis, please raise an issue on the repository or contact renhuahui90@gmail.com.
 
