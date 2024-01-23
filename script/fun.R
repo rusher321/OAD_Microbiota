@@ -217,3 +217,157 @@ study_name_order <- c("GuYY_2017_Acarbose_D90", "ZhangXY_2021_Acarbose_D168",
                    "WuH_2017_Metformin_D120", "RenHH_2023_Metformin_D90", 
                    "ZhangXY_2021_Vlidagliptin_D168", 
                    "GuYY_2017_Glipizide_D90",  "ZhangYF_2020_Placebo_D84")
+
+GEEAna <- function (dataset, metadata, confounder, timevar, scale, IDvar,
+                    ...)
+{
+  id <- intersect(rownames(dataset), rownames(metadata))
+  dataset <- dataset[id, ]
+  metadata <- metadata[id, ]
+  print("confirm the sample ID is order by time")
+  metadata <- metadata[order(metadata[, timevar]), ]
+  dataset <- dataset[rownames(metadata), ]
+  confounderindex <- which(colnames(metadata) %in% c(confounder,
+                                                     timevar, IDvar))
+  
+  datacon <- metadata[, confounderindex]
+  metadatafilter <- metadata[, -confounderindex, drop=F]
+  result <- matrix(NA, nrow = ncol(metadatafilter), ncol = ncol(dataset) *
+                     2)
+  result <- as.data.frame(result)
+  rownames(result) <- colnames(metadatafilter)
+  for (i in 1:c(ncol(metadatafilter))) {
+    for (j in 1:ncol(dataset)) {
+      dat_com <- data.frame(x = metadatafilter[, i], y = dataset[,
+                                                                 j], datacon, PatientID = metadata[, IDvar])
+      formula <- formula(paste0("y~x+", paste(confounder,
+                                              collapse = "+")))
+      dat_com <- dat_com[!apply(dat_com, 1, function(x) {
+        any(is.na(x))
+      }), ]
+      if (scale) {
+        dat_com$x <- scale(invt(dat_com$x))
+        dat_com$y <- scale(invt(dat_com$y))
+      }
+       tryCatch({geeInd <- geem(formula, id = PatientID, data = dat_com,
+                     family = gaussian, corstr = "unstructured")
+       tmp <- summary(geeInd)
+       result[i, c((2 * j - 1):(2 * j))] <- c(tmp$wald.test[2],
+                                              tmp$p[2])
+       colnames(result)[c((2 * j - 1):(2 * j))] <- paste0(colnames(dataset)[j],
+                                                          c("wald", "_p.value"))
+       },# notice
+                     error = function(e){
+                       result[i, c((2 * j - 1):(2 * j))] <- c(0, 1)
+                       colnames(result)[c((2 * j - 1):(2 * j))] <- paste0(colnames(dataset)[j],
+                                                                          c("wald", "_p.value"))
+                     })
+      
+    }
+  }
+  return(result)
+}
+
+corPlot_tmp <- function (corres, cutoff, adjust, tr,  cluster=F, row_clust = F, col_clust=F)
+{
+  trans <- function(x) {
+    if (x <= 0.05 & x > 0.01) {
+      out <- "*"
+    }
+    else if (x <= 0.01 & x > 0.001) {
+      out <- "**"
+    }
+    else if (x <= 0.001) {
+      out <- "***"
+    }
+    else {
+      out <- " "
+    }
+    return(out)
+  }
+  trans2 <- function(x){
+    if(x<=0.05){
+      out <- "#"
+    }else{
+      out <- " "
+    }
+    return(out)
+  }
+  trans3 <- function(x, y){
+    if(x != " "){
+      out <- x
+    }else{
+      out <- y
+    }
+    return(out)
+  }
+  
+  
+  xname <- rownames(corres)
+  corres <- apply(corres, 2, as.numeric)
+  sp.corr.t <- corres
+  rownames(sp.corr.t) <- xname
+  index <- 2 * c(1:(ncol(sp.corr.t)/2))
+  dat.pvalue <- sp.corr.t[, index]
+  dat.pvalue[is.na(dat.pvalue)] <- 1
+  dat.pvalue.tmp <- dat.pvalue
+  dat.cor <- sp.corr.t[, -index]
+  dat.cor[is.na(dat.cor)] <- 0
+  colnames(dat.cor) <- gsub("_p.value", "", colnames(dat.pvalue))
+  if (adjust) {
+    dat.raw <- dat.pvalue
+    dat.pvalue <- apply(dat.pvalue, 2, p.adjust, method = "BH")
+  }
+  rmindex <-     pvalue.index2 <- apply(dat.pvalue, 1, function(x) any(x < 
+                                                                         cutoff))
+  rmindex2 <-     pvalue.index2 <- apply(dat.pvalue, 2, function(x) any(x < 
+                                                                          cutoff)) 
+  dat.cor.cle <- dat.cor[, rmindex2]
+  dat.pva.cle <- dat.pvalue[, rmindex2]
+  dat.raw.cle <- dat.raw[, rmindex2]
+  #dat.pvalue.tmp <- dat.pvalue.tmp[rmindex, paste0(selectF, "_p.value")]
+  
+  num <- matrix(NA, nrow = nrow(dat.pva.cle), ncol = ncol(dat.pva.cle))
+  for (i in 1:ncol(dat.pva.cle)) {
+    num[, i] <- mapply(trans, dat.pva.cle[, i])
+  }
+  
+  num2 <- matrix(NA, nrow = nrow(dat.pva.cle), ncol = ncol(dat.pva.cle))
+  for (i in 1:ncol(dat.pva.cle)) {
+    num2[, i] <- mapply(trans2, dat.raw.cle[, i])
+  }
+  
+  num3 <- matrix(NA, nrow = nrow(dat.pva.cle), ncol = ncol(dat.pva.cle))
+  for (i in 1:ncol(dat.pva.cle)) {
+    num3[, i] <- mapply(trans3, num[, i], num2[,i])
+  }
+  num <- num3
+  
+  colt <- c("#4C38CB", "#9191C8", "#DADAEC", 
+            "#F0C1C1", "#E28383", "#D44545", "#CD2626")
+  colt <- colorRampPalette(colt)(9)
+  #colt <- c("#87CEEB", "#FFFFFF", "#FF69B4")
+  if (tr) {
+    dat.cor.cle <- t(dat.cor.cle)
+    num <- t(num3)
+  }
+  
+  wald <- max(max(dat.cor.cle), abs(min(dat.cor.cle)))
+  wald <- 8
+  gapwald1 <- seq(0, wald,  wald/4)
+  gapwald2 <- seq(-wald, 0, wald/4)
+  
+  if(!cluster){
+      ComplexHeatmap::pheatmap(dat.cor.cle, treeheight_row = 43, treeheight_col = 23,
+                       cellwidth = 20, cellheight = 8, cluster_cols = col_clust, cluster_rows = row_clust,
+                       fontsize_row = 8, fontsize_col = 13, show_colnames = T,
+                       display_numbers = num, color =  colt,breaks = c(gapwald2,
+                                                                       gapwald1[-1]) ,number_color = "black")
+  }else{
+    ComplexHeatmap::pheatmap(dat.cor.cle, treeheight_row = 43, treeheight_col = 23,
+                       cellwidth = 20, cellheight = 8, cluster_cols = col_clust, cluster_rows = row_clust,
+                       fontsize_row = 8, fontsize_col = 13, show_colnames = T,
+                       display_numbers = num, color =  colt,breaks = c(gapwald2,
+                                                                       gapwald1[-1]) ,number_color = "black")
+  }
+}

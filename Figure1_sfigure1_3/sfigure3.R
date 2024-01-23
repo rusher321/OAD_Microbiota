@@ -68,6 +68,12 @@ library(ggplot2)
 library(ggpolypath)
 names(plot_list) <- c("Glipizide", "Vildagliptin", "Berberine", "Metformin", "Acarbose")
 p1 <- venn(plot_list, ggplot= T, zcolor = brewer.pal(n = 8, name = "Dark2"), ilcs = 2)+theme_classic()+ggtitle("Species increased in abundance\nfollowing OAD treatment")
+if(F){
+  upfeature <- unique(c(plot_list$Glipizide, intersect(plot_list$Berberine, plot_list$Acarbose)
+                     , intersect(plot_list$Berberine, plot_list$Metformin), 
+                     intersect(plot_list$Acarbose, plot_list$Vildagliptin)))
+}
+
 
 col_clr_enrich <- com_clr[com_clr$enrich3 == "Pre", ]
 plot_list <- lapply(split(col_clr_enrich, f = col_clr_enrich$group), function(x){x$tax})
@@ -87,6 +93,14 @@ plot_list[["GuYY_2017_Acarbose_D90"]] <- NULL
 plot_list[["ZhangXY_2021_Acarbose_D168"]] <- NULL
 
 names(plot_list) <- c("Glipizide", "Vildagliptin", "Berberine", "Metformin", "Acarbose")
+
+if(F){
+  downfeature <- unique(c(intersect(plot_list$Berberine, plot_list$Acarbose)
+                        , intersect(plot_list$Berberine, plot_list$Metformin), 
+                        intersect(plot_list$Acarbose, plot_list$Vildagliptin),
+                        intersect(plot_list$Berberine, plot_list$Vildagliptin)))
+  save(upfeature, downfeature, file = "../inputdata/spe_intersect.Rds")
+  }
 
 p2 <- venn(plot_list, ggplot= T, zcolor = brewer.pal(n = 8, name = "Dark2"), ilcs = 2)+theme_classic()+ggtitle("Species decreased in abundance\nfollowing OAD treatment")
 

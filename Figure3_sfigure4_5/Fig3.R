@@ -3,6 +3,7 @@
 # fig3a
 
 fun_com <- read.csv("../inputdata/bafun.compare.csv",row.names = 1)
+fun_com$group <- gsub("YangFM_2021_Metformin_D90", "RenHH_2023_Metformin_D90", fun_com$group)
 qdat <- fun_com
 library(tidyr)
 all_fun <- c("bsh", "baiE", "baiI", "7-beta-hsdh")
@@ -71,7 +72,7 @@ qdat <- com_plot2
 
 qdat$KO <- factor(qdat$KO, levels = all_fun)
 
-qdat$group <- factor(qdat$variable, levels = study_name_v2)
+qdat$group <- factor(qdat$variable, levels = study_name_order)
 
 p_ba2 <- ggplot(qdat, aes( y = KO, x = group))+
   geom_point(aes(size= size, color=sig2, shape = shape))+
@@ -86,7 +87,7 @@ p_ba2 <- ggplot(qdat, aes( y = KO, x = group))+
   nature_theme2+
   theme(legend.position = "top")+scale_size_continuous(range = c(1,3))
 
-ggsave(plot = p_ba2, filename = "../result/Figure3/fig3a_v2.pdf", device = "pdf", width = 4, height = 3)
+ggsave(plot = p_ba2, filename = "../result/Figure3/fig3a_v2.pdf", device = "pdf", width = 4.5, height = 2.8)
 
 # fig3b
 source("../script/fun.R")
@@ -148,6 +149,9 @@ out1 <- p1+p2
 ggsave(filename = "../result/Figure3/fig3c.pdf", plot = out1, device = "pdf", height = 4, width = 10)
 
 # fig3d 
+all_fun <- c("K01034", "K00634", "K00929", "K01745", 
+             "K17363", "K05878", "K05879", "K05881",
+             "K00005", "K00864", "K03621" )
 
 fun_com <- read.csv("../inputdata/all.fun.compare_0807.csv", row.names = 1)
 qdat <- fun_com
@@ -239,7 +243,7 @@ p_scfa2 <- ggplot(qdat, aes( y = KO, x = group))+
   nature_theme2+
   theme(legend.position = "top")+scale_size_continuous(range = c(1,3))
 
-ggsave(plot = p_scfa2, filename = "../result/Figure3/fig3d_v2.pdf", device = "pdf", width = 4, height = 3.5)
+ggsave(plot = p_scfa2, filename = "../result/Figure3/fig3d_v2.pdf", device = "pdf", width = 4.5, height = 4.5)
 
 # fig3e
 ba_com <- readRDS("../inputdata/acar_ba.rds")

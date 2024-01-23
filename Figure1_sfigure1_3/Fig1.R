@@ -32,8 +32,8 @@ for(i in var){
     geom_point(aes(shape = shape, fill = shape),  position=pd, size=6) + # 21 is filled circle
     xlab(paste0("Change of ", i)) +
     ylab("") +
-    scale_fill_manual(values = c("#e59572", "#2694ab")) +
-    scale_color_manual(values = c("#e59572", "#2694ab")) +
+    scale_fill_manual(values = c("#E41A1C",  "#999999")) +
+    scale_color_manual(values = c("#E41A1C",  "#999999")) +
     scale_shape_manual(values = c(23, 21))+
     expand_limits(y=0)+                        # Expand y range
     #scale_y_continuous(breaks=0:20*4) +         # Set tick every 4
@@ -42,7 +42,7 @@ for(i in var){
 }
 out <- cowplot::plot_grid(plotlist = plist, nrow = 1, hjust = "h")
 
-ggsave(filename = "../result/Figure1_sfigure1_3/fig1a_b.pdf", plot = out, device = "pdf", width = 10, height = 6)
+ggsave(filename = "../result/Figure1_sfigure1_3/fig1a_b.pdf", plot = out, device = "pdf", width = 9, height = 5)
 
 ## fig1C: adonise 
 
@@ -54,14 +54,14 @@ adonise_r2 <- readRDS("../inputdata/Fig1_adonise.Rds")
 adonise_r2$label <- factor(adonise_r2$label, rev(study_name_ord))
 
 p1 <- ggplot(adonise_r2, aes(x = label, y= value*100,  color = variable))+
-  geom_point(aes(shape=pvalue), size = 8, position = position_dodge(0.3))+
+  geom_point(aes(shape=pvalue), size = 5, position = position_dodge(0.3))+
   coord_flip()+ylab("R^2")+xlab("")+ylim(0,10)+
   theme_classic()+
   guides(color=guide_legend(title="Dissimilarty"), size = guide_legend(title = "Pvalue"))+scale_shape_manual(values = c(18, 16))+
   scale_color_ipsum()+
   labs(y="R2 (%)",title="ADONIS")
 
-ggsave(filename = "../result/Figure1_sfigure1_3/fig1c.pdf", plot = p1, device = "pdf", width = 5.5, height = 7)
+ggsave(filename = "../result/Figure1_sfigure1_3/fig1c.pdf", plot = p1, device = "pdf", width = 4.5, height = 5.5)
 
 ## fig1D: classification matrix 
 
@@ -169,8 +169,8 @@ class_res_order <- class_res[, c(1,6,8,7,3,4,5,2,9)]
 colnames(class_res_order) <- study_name_ord
 
 library(ComplexHeatmap)
-pdf("../result/Figure1_sfigure1_3/fig1d_Classification.distance.pdf", width = 5, height = 7.5)
-pheatmap(t(class_res_order), display_numbers  = t(apply(round(class_res_order*100, 2), 2, function(x){paste0(x, "%")})), cluster_rows = F, cluster_cols = F,angle_col = "45", color = rev(colorRampPalette(c("#FBFEF9","#A63446"))(20)), main = "Classification beased on Distance", fontsize_number = 10, fontsize_col = 10)
+pdf("../result/Figure1_sfigure1_3/fig1d_Classification.distance.pdf", width = 4.5, height = 5)
+pheatmap(t(class_res_order), display_numbers  = t(apply(round(class_res_order*100, 2), 2, function(x){paste0(x, "%")})), cluster_rows = F, cluster_cols = F,angle_col = "45", color = rev(colorRampPalette(c("#FBFEF9","#A63446"))(20)), main = "Classification beased on Distance", fontsize_number = 6, fontsize_col = 10)
 dev.off()
 
 ## Fig1E: compare result 
