@@ -1,64 +1,64 @@
-<mxfile host="app.diagrams.net" modified="2024-01-23T08:10:57.727Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="W2eADFipaIO7FW_2F0HC" version="22.1.21" type="github">
+<mxfile host="app.diagrams.net" modified="2024-01-23T08:26:38.849Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="8SRK4ZjZ8iLyC656w_h3" version="22.1.21" type="github">
   <diagram name="第 1 页" id="JPDoaFtokGly6kBNtgCC">
     <mxGraphModel dx="796" dy="456" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="uKmnsb-paR_6ves892hA-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-1" target="uKmnsb-paR_6ves892hA-2">
+        <mxCell id="uKmnsb-paR_6ves892hA-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-1" target="uKmnsb-paR_6ves892hA-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-1" value="Records identified through database searching&lt;br&gt;(n = 1258 )" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-1" value="Records identified through database searching&lt;br&gt;(n = 1349 )" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="290" y="40" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-2" target="uKmnsb-paR_6ves892hA-4">
+        <mxCell id="uKmnsb-paR_6ves892hA-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-2" target="uKmnsb-paR_6ves892hA-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-2" target="uKmnsb-paR_6ves892hA-22">
+        <mxCell id="uKmnsb-paR_6ves892hA-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-2" target="uKmnsb-paR_6ves892hA-22" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-2" value="Records after&amp;nbsp; filtered&lt;br&gt;(n = 68)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-2" value="Records after&amp;nbsp; filtered&lt;br&gt;(n = 68)" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="290" y="170" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-4" target="uKmnsb-paR_6ves892hA-6">
+        <mxCell id="uKmnsb-paR_6ves892hA-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-4" target="uKmnsb-paR_6ves892hA-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-4" target="uKmnsb-paR_6ves892hA-12">
+        <mxCell id="uKmnsb-paR_6ves892hA-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-4" target="uKmnsb-paR_6ves892hA-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-4" value="Title and abstract reviewed&lt;br&gt;(n = 18)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-4" value="Title and abstract reviewed&lt;br&gt;(n = 18)" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="290" y="320" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-6" target="uKmnsb-paR_6ves892hA-8">
+        <mxCell id="uKmnsb-paR_6ves892hA-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-6" target="uKmnsb-paR_6ves892hA-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="uKmnsb-paR_6ves892hA-6" target="uKmnsb-paR_6ves892hA-13">
+        <mxCell id="uKmnsb-paR_6ves892hA-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="uKmnsb-paR_6ves892hA-6" target="uKmnsb-paR_6ves892hA-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-6" value="Full-text articles for eligibility&lt;br&gt;(n = 5 )" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-6" value="Full-text articles for eligibility&lt;br&gt;(n = 5 )" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="290" y="460" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-8" value="Studies included in qualitative analysis &lt;br&gt;(n = 5)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-8" value="Studies included in qualitative analysis &lt;br&gt;(n = 5)" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="290" y="600" width="200" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-12" value="Records excluded (n =50)&lt;br&gt;&amp;nbsp; &amp;nbsp; 1. not related (n= 9)&lt;br&gt;&amp;nbsp; &amp;nbsp; 2. not antidiabetic drug (n = 41)" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-12" value="Records excluded (n =50)&lt;br&gt;&amp;nbsp; &amp;nbsp; 1. not related (n= 9)&lt;br&gt;&amp;nbsp; &amp;nbsp; 2. not antidiabetic drug (n = 41)" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="590" y="320" width="190" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-13" value="Full-text articles excluded (n=13)&lt;br&gt;&amp;nbsp; 1. 16S amplicon data (n = 11)&lt;br&gt;&amp;nbsp; 2.&amp;nbsp; small sample size (n = 1)&lt;br&gt;&amp;nbsp; 3.&amp;nbsp; repeated published (n=1)" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-13" value="Full-text articles excluded (n=13)&lt;br&gt;&amp;nbsp; 1. 16S amplicon data (n = 11)&lt;br&gt;&amp;nbsp; 2.&amp;nbsp; small sample size (n = 1)&lt;br&gt;&amp;nbsp; 3.&amp;nbsp; repeated published (n=1)" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="591" y="450" width="189" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-18" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Identification&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-18" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Identification&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" parent="1" vertex="1">
           <mxGeometry x="140" y="100" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-19" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Screening&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-19" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Screening&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" parent="1" vertex="1">
           <mxGeometry x="140" y="257" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-20" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Eligibility&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-20" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Eligibility&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" parent="1" vertex="1">
           <mxGeometry x="141" y="411" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-21" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Included&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-21" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Included&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;rotation=-90;" parent="1" vertex="1">
           <mxGeometry x="141" y="580" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="uKmnsb-paR_6ves892hA-22" value="Records excluded (n =)&lt;br&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;1. not in the last 5 years (n = )&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;2. not clinical trial (n = )&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="1">
+        <mxCell id="uKmnsb-paR_6ves892hA-22" value="Records excluded (n = 1281)&lt;br&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;1. not in the last 5 years (n=219)&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp;2. not clinical trial (n = 1062)&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="1" vertex="1">
           <mxGeometry x="590" y="160" width="190" height="80" as="geometry" />
         </mxCell>
       </root>
