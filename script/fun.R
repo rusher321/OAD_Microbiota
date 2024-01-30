@@ -371,3 +371,180 @@ corPlot_tmp <- function (corres, cutoff, adjust, tr,  cluster=F, row_clust = F, 
                                                                        gapwald1[-1]) ,number_color = "black")
   }
 }
+
+Uniqueness <- function(d){
+  d <- as.matrix(d)
+  u <- matrix(NA,nrow(d),1)
+  u <- as.data.frame(u)
+  rownames(u) <- rownames(d)
+  colnames(u) <- "Uniqueness"
+  for(x in 1:nrow(d)){
+    a <- as.numeric(d[x,-x])
+    u[x,1] <- min(a)
+  }
+  u
+}
+
+diversity_f <- function(dat){
+  
+  richness <- apply(dat, 1, function(x){sum(x!=0)})
+  shannon <- diversity(dat, index = "shannon")
+  invsimpson <- diversity(dat, index = "invsimpson")
+  # transform clr
+  
+  distD1 <- vegan::vegdist(vegan::decostand(dat, method = "hellinger"),
+                           method = "euclidean", binary = 1)
+  distD2 <- philentropy::JSD(as.matrix(dat))
+  rownames(distD2) <- colnames(distD2) <- rownames(dat)
+  distD2 <- as.dist(distD2)
+  
+  distD3 <- as.dist(1 - cor(t(dat), method = "s"))
+  
+  d.kendall <- 1-cor.fk(t(dat))
+  d.bray <- vegdist(dat, method = "bray")
+  #dat_t <- zCompositions::cmultRepl(dat)
+  #dat_clr <- robCompositions::cenLR(dat_t)$x.clr
+  #d.aitchison <- vegdist(dat_clr, method="euclidean")
+  
+  uniq_bray <- Uniqueness(d.bray)
+  uniq_kendall <- Uniqueness(d.kendall)
+  #uniq_aitchison <- Uniqueness(d.aitchison)
+  uniq_hell <- Uniqueness(distD1)
+  uniq_jsd <- Uniqueness(distD2)
+  uniq_spe <- Uniqueness(distD3)
+  
+  out <- data.frame(richness, shannon, invsimpson, uniq_bray, uniq_kendall,
+                    uniq_hell, uniq_jsd, uniq_spe)
+  rownames(out) <- rownames(dat)
+  colnames(out)[4:8] <- c("Uniqueness_bray", "Uniqueness_kendall",
+                          "Uniqueness_hellinger", "Uniqueness_JSD", "Uniqueness_spearman")
+  return(out)
+  
+}
+
+std_robust <- function(x){sd = jointseg::estimateSd(x, method = "von Neumann"); return(sd/sqrt(length(x[!is.na(x)])))}
+
+sd_robust <- function(x){sd = jointseg::estimateSd(x, method = "von Neumann");sd}
+
+metainf2 <- function(phe, feature = c("richness", "shannon", "Uniqueness_bray", "Uniqueness_kendall",
+                                      "Uniqueness_hellinger", "Uniqueness_JSD", "Uniqueness_spearman")
+){
+  
+  durgL <- unique(phe$Drug)
+  timeL <- sort(unique(phe$Time))
+  timeN <- length(timeL)
+  #feature <-  c("richness", "shannon", "Uniqueness_bray", "Uniqueness_kendall",
+  #              "Uniqueness_hellinger", "Uniqueness_JSD", "Uniqueness_spearman")
+  
+  
+  out <- matrix(" ", nrow = length(durgL)*(length(timeL)-1), ncol = length(feature)*3)
+  rownames(out) <- paste0(rep(durgL,each = length(timeL)-1), "_", timeL[-1])
+  
+  colnames(out) <- paste0(rep(feature, each = 3), c("_md", "_std", "_pvalue") )
+  
+  for(i in 1:length(durgL)){
+    
+    tmpphe <- phe[phe$Drug == durgL[i], ]
+    tmpphe_match <- matchpairID(configdat = tmpphe, ID = "PID", Time = "Time", num = length(timeL))
+    
+    for(j in 1:length(feature)){
+      for(z in 2:length(timeL)){      
+        base <- tmpphe_match[tmpphe_match$Time == timeL[1], feature[j]]
+        treat <- tmpphe_match[tmpphe_match$Time == timeL[z], feature[j]]
+        value1 <- treat - base
+        value2 <- round(median(value1, na.rm = T), 2)
+        if(all(is.na(value1))){
+          pvalue <- 1
+        }else{
+          pvalue <- wilcox.test(base, treat, paired= T)$p.value
+        }
+        #value3 <- round(mad(value1, na.rm = T), 2)
+        value3 <- round(std_robust(value1), 2)
+        
+        if(timeN == 2){
+          out[i+z-2, (3*j-2):(3*j)] <- c(value2, value3, pvalue)
+        }else{
+          out[2*i+z-3, (3*j-2):(3*j)] <- c(value2, value3, pvalue) 
+        }      
+        
+        #out[i, (3*j-2):(3*j)] <- c(value2, value3, pvalue)
+        
+      }
+    }
+  }
+  # colnames(out) <- paste0(rep(feature, each = 2), c("_md", "_std") )
+  # for(i in 1:length(durgL)){
+  #   
+  #   tmpphe <- phe[phe$Drug == durgL[i], ]
+  #   tmpphe_match <- matchpairID(configdat = tmpphe, ID = "PID", Time = "Time", num = length(timeL))
+  #   
+  #   for(j in 1:length(feature)){
+  #     for(z in 2:length(timeL)){
+  #       base <- tmpphe_match[tmpphe_match$Time == timeL[1], feature[j]]
+  #       treat <- tmpphe_match[tmpphe_match$Time == timeL[z], feature[j]]
+  #       value1 <- treat - base
+  #       value2 <- round(median(value1, na.rm = T), 2)
+  #       value3 <- round(std(value1), 2)
+  #       if(timeN == 2){
+  #         out[i+z-2, (2*j-1):(2*j)] <- c(value2, value3)
+  #       }else{
+  #         out[2*i+z-3, (2*j-1):(2*j)] <- c(value2, value3) 
+  #       }
+  #     }
+  #   }
+  # }
+  return(out)
+}
+
+
+
+
+
+metainf_robust <- function(phe, feature = NULL){
+  
+  durgL <- unique(phe$Drug)
+  timeL <- sort(unique(phe$Time))
+  timeN <- length(timeL)
+  #feature <-  c("richness", "shannon", "Uniqueness_bray", "Uniqueness_kendall",
+  #              "Uniqueness_hellinger", "Uniqueness_JSD", "Uniqueness_spearman")
+  
+  if(is.null(feature)){
+    stop("give some feature!")
+  }
+  out <- matrix(" ", nrow = length(durgL)*(length(timeL)-1), ncol = length(feature)*3)
+  rownames(out) <- paste0(rep(durgL,each = length(timeL)-1), "_", timeL[-1])
+  
+  colnames(out) <- paste0(rep(feature, each = 3), c("_md", "_std", "_pvalue") )
+  
+  for(i in 1:length(durgL)){
+    
+    tmpphe <- phe[phe$Drug == durgL[i], ]
+    tmpphe_match <- matchpairID(configdat = tmpphe, ID = "PID", Time = "Time", num = length(timeL))
+    
+    for(j in 1:length(feature)){
+      for(z in 2:length(timeL)){      
+        base <- tmpphe_match[tmpphe_match$Time == timeL[1], feature[j]]
+        treat <- tmpphe_match[tmpphe_match$Time == timeL[z], feature[j]]
+        value1 <- treat - base
+        value2 <- round(median(value1, na.rm = T)/sd_robust(value1), 2)
+        if(all(is.na(value1))){
+          pvalue <- 1
+        }else{
+          pvalue <- wilcox.test(base, treat, paired= T)$p.value
+        }
+        #value3 <- round(mad(value1, na.rm = T), 2)
+        value3 <- round(std_robust(value1), 2)
+        
+        if(timeN == 2){
+          out[i+z-2, (3*j-2):(3*j)] <- c(value2, value3, pvalue)
+        }else{
+          out[2*i+z-3, (3*j-2):(3*j)] <- c(value2, value3, pvalue) 
+        }      
+        
+        #out[i, (3*j-2):(3*j)] <- c(value2, value3, pvalue)
+        
+      }
+    }
+  }
+  return(out)
+}

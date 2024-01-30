@@ -27,6 +27,8 @@ for(i in var){
   qdat_tmp$shape <- factor(qdat_tmp$shape, levels = c("enrich", "ns"))
   qdat_tmp$label <- factor(qdat_tmp$label, levels = rev(study_name_ord))
   
+  #qdat_tmp$sd_var <- ifelse(qdat_tmp$x_var < 0, -qdat_tmp$sd_var, qdat_tmp$sd_var)
+  
   plist[[i]] <- ggplot(qdat_tmp, aes(x=x_var, y=label)) + 
     geom_errorbar(aes(xmin=x_var-sd_var, xmax=x_var+sd_var), colour="grey", width=.4, position=pd) +
     geom_point(aes(shape = shape, fill = shape),  position=pd, size=6) + # 21 is filled circle
@@ -42,7 +44,7 @@ for(i in var){
 }
 out <- cowplot::plot_grid(plotlist = plist, nrow = 1, hjust = "h")
 
-ggsave(filename = "../result/Figure1_sfigure1_3/fig1a_b.pdf", plot = out, device = "pdf", width = 9, height = 5)
+ggsave(filename = "../result/Figure1_sfigure1_3/fig1a_b.pdf", plot = out, device = "pdf", width = 12, height = 5)
 
 ## fig1C: adonise 
 
@@ -182,6 +184,7 @@ taxorder <- readRDS("../inputdata/Fig1_tax_order.Rds")
 library(RColorBrewer)
 library(circlize)
 library(reshape2)
+library(tidyverse)
 
 qdat <- dcast(qdat1, tax~group, value.var = "effect_size")
 pvalue <- dcast(qdat1, tax~group, value.var = "sign_p.value")
@@ -189,10 +192,18 @@ qdat2 <- qdat[,2:10]
 rownames(qdat2) <- qdat[, 1]
 qdat2[pvalue[,2:10] >0.05] <- 0 
 
+lab <- dcast(qdat1, tax~group, value.var = "p.adjust")
+
 qdat3 <- -qdat2[rownames(taxorder), ]
 colnames(qdat3) <- c("Plac_D84", "Glip_D90", "Vild_D168", "Metf_D90",
                      "Metf_D120", "Metf_D60", "BBR_D84", "Acar_D168", "Acar_D90")
 split <- taxorder[,1]
+
+lab <- lab %>% column_to_rownames(var = "tax")
+lab <- lab[,colnames(qdat2)]
+colnames(lab) <- colnames(qdat3)
+lab <- apply(lab,2,function(x) ifelse(x<0.05,"*",""))
+lab <- lab[rownames(qdat3),]
 
 circos.clear()
 
@@ -204,6 +215,29 @@ circos.heatmap(qdat3, col = col_fun1, split = split, cluster = F, rownames.side 
                #bg.border = "grey",
                cell.border = "grey", bg.lwd = 2, bg.lty = 2, show.sector.labels = TRUE, track.height = 0.3)
 
+circos.track(
+  track.index = 1, 
+  panel.fun = function(x, y) {
+    n = ncol(lab)
+    for(yid in 1:n){
+      if(CELL_META$sector.numeric.index==1){
+        circos.text(CELL_META$row_order, 10-yid, adj = c(1.5,0.5), lab[1:42,yid],facing = "bending.inside", niceFacing = TRUE)
+      }
+      if(CELL_META$sector.numeric.index==2){
+        circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[43:73,yid],facing = "bending.inside", niceFacing = TRUE)
+      }
+      if(CELL_META$sector.numeric.index==3){
+        circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[74:82,yid],facing = "bending.inside", niceFacing = TRUE)
+      }
+      if(CELL_META$sector.numeric.index==4){
+        circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[83:91,yid],facing = "bending.inside", niceFacing = TRUE)
+      }
+      if(CELL_META$sector.numeric.index==5){
+        circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[92,yid],facing = "bending.inside", niceFacing = TRUE)
+      }
+    }
+  }, bg.border = NA)
+
 circos.track(track.index = get.current.track.index(), panel.fun = function(x, y) {
   if(CELL_META$sector.numeric.index == 5) { # the last sector
     cn = rev(colnames(qdat3))
@@ -213,6 +247,7 @@ circos.track(track.index = get.current.track.index(), panel.fun = function(x, y)
                 cex = 0.5, adj = c(0, 0.5), facing = "inside")
   }
 }, bg.border = NA)
+
 library(ComplexHeatmap)
 lgd = Legend(title = "Effect size", col_fun = col_fun1)
 grid.draw(lgd)

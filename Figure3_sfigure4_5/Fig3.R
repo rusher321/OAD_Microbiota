@@ -1,7 +1,8 @@
 #-----------------------------Fig3--------------------------------------------#
 
 # fig3a
-
+source("../script/fun.R")
+library(ggplot2)
 fun_com <- read.csv("../inputdata/bafun.compare.csv",row.names = 1)
 fun_com$group <- gsub("YangFM_2021_Metformin_D90", "RenHH_2023_Metformin_D90", fun_com$group)
 qdat <- fun_com
@@ -26,13 +27,12 @@ com_pvalue <- melt(pvalue_com)
 com_qvalue <- melt(qvalue_com)
 
 com_plot2$dir <- ifelse(com_plot2$value < 0 , "base", "post") 
-com_plot2$variable <- factor(com_plot2$variable, levels = study_name_order)
+com_plot2$variable <- factor(com_plot2$variable, levels = rev(study_name_order))
 com_plot2$pvalue <- com_pvalue$value
 com_plot2$qvalue <- com_qvalue$value
 com_plot2$enrich <- ifelse(com_plot2$qvalue < 0.05 , "*", ifelse(com_plot2$qvalue >0.05 & com_plot2$pvalue <0.05, "#", " "))
-com_plot2$KO <- factor(com_plot2$KO, levels = all_fun)
+com_plot2$KO <- factor(com_plot2$KO, levels = rev(all_fun))
 com_plot2 <- na.omit(com_plot2)
-
 
 #com_plot2$variable <- factor(com_plot2$variable, levels = study_name2)
 p_ba <- ggplot(com_plot2, aes(y = KO, x = value, color= dir)) + 
@@ -70,13 +70,13 @@ com_plot2$sig2 <- ifelse(com_plot2$pvalue<0.05, "P<0.05", "P>=0.05")
 com_plot2$shape2 <- ifelse(com_plot2$value>0, 2, 6)
 qdat <- com_plot2
 
-qdat$KO <- factor(qdat$KO, levels = all_fun)
+qdat$KO <- factor(qdat$KO, levels = rev(all_fun))
 
-qdat$group <- factor(qdat$variable, levels = study_name_order)
+qdat$group <- factor(qdat$variable, levels = rev(study_name_order))
 
-p_ba2 <- ggplot(qdat, aes( y = KO, x = group))+
+p_ba2 <- ggplot(qdat, aes( x = KO, y = group))+
   geom_point(aes(size= size, color=sig2, shape = shape))+
-  geom_point(aes(size= size,fill = -value, alpha= sig, color=sig2,  shape = shape),stroke=0)+
+  geom_point(aes(size= size+0.2,fill = -value, alpha= sig, color=sig2,  shape = shape),stroke=0)+
   scale_fill_gradientn(
     colours = color,
     guide=guide_colourbar(ticks=T,nbin=50,barheight=.5, label=T,barwidth=10)
@@ -154,6 +154,7 @@ all_fun <- c("K01034", "K00634", "K00929", "K01745",
              "K00005", "K00864", "K03621" )
 
 fun_com <- read.csv("../inputdata/all.fun.compare_0807.csv", row.names = 1)
+fun_com$group <- gsub("YangFM_2021_Metformin_D90", "RenHH_2023_Metformin_D90", fun_com$group)
 qdat <- fun_com
 anno <- data.frame( SCFA = c(rep("Butyrate", 3), rep("IMP",2), 
                              rep("Glycerolipid", 6)))
@@ -181,7 +182,7 @@ com_pvalue <- melt(pvalue_com)
 com_qvalue <- melt(qvalue_com)
 
 com_plot2$dir <- ifelse(com_plot2$value < 0 , "base", "post") 
-com_plot2$variable <- factor(com_plot2$variable, levels = study_name_v2)
+com_plot2$variable <- factor(com_plot2$variable, levels = study_name_order)
 com_plot2$pvalue <- com_pvalue$value
 com_plot2$qvalue <- com_qvalue$value
 com_plot2$enrich <- ifelse(com_plot2$qvalue < 0.05 , "*", ifelse(com_plot2$qvalue >0.05 & com_plot2$pvalue <0.05, "#", " "))
@@ -224,15 +225,15 @@ com_plot2$sig2 <- ifelse(com_plot2$pvalue<0.05, "P<0.05", "P>=0.05")
 com_plot2$shape2 <- ifelse(com_plot2$value>0, 2, 6)
 qdat <- com_plot2
 
-qdat$KO <- factor(qdat$KO, levels = rev(c("K01034", "K00634", "K00929", "K01745", 
+qdat$KO <- factor(qdat$KO, levels = c("K01034", "K00634", "K00929", "K01745", 
                                       "K17363", "K05878", "K05879", "K05881",
-                                      "K00005", "K00864", "K03621" )))
+                                      "K00005", "K00864", "K03621" ))
 
-qdat$group <- factor(qdat$variable, levels = study_name_v2)
+qdat$group <- factor(qdat$variable, levels = rev(study_name_order))
 
-p_scfa2 <- ggplot(qdat, aes( y = KO, x = group))+
-  geom_point(aes(size= size, color=sig2, shape = shape))+
-  geom_point(aes(size= size,fill = -value, alpha= sig, color=sig2,  shape = shape),stroke=0)+
+p_scfa2 <- ggplot(qdat, aes( x = KO, y = group))+
+  geom_point(aes(size= size+0.2, color=sig2, shape = shape))+
+  geom_point(aes(size= size+0.2,fill = -value, alpha= sig, color=sig2,  shape = shape),stroke=0)+
   scale_fill_gradientn(
     colours = color,
     guide=guide_colourbar(ticks=T,nbin=50,barheight=.5, label=T,barwidth=10)
@@ -241,9 +242,13 @@ p_scfa2 <- ggplot(qdat, aes( y = KO, x = group))+
   scale_shape_manual(values = c(24, 25, 1))+
   theme_minimal()+
   nature_theme2+
-  theme(legend.position = "top")+scale_size_continuous(range = c(1,3))
+  theme(legend.position = "top")+scale_size_continuous(range = c(1,3))+theme(axis.text.y = element_blank())+ylab("")
 
 ggsave(plot = p_scfa2, filename = "../result/Figure3/fig3d_v2.pdf", device = "pdf", width = 4.5, height = 4.5)
+
+library(aplot)
+out <- p_scfa2 %>% insert_left(p_ba2, width = 0.3)
+ggsave(plot = out, filename = "../result/Figure3/fig3d_v3.pdf", device = "pdf", width = 8, height = 4.5)
 
 # fig3e
 ba_com <- readRDS("../inputdata/acar_ba.rds")
