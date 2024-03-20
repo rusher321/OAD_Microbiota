@@ -253,6 +253,102 @@ lgd = Legend(title = "Effect size", col_fun = col_fun1)
 grid.draw(lgd)
 dev.off()
 
+## update using the mp4 
+
+qdat1 <- read.csv("../inputdata/species.all.clr.compre.csv",row.names = 1)
+taxrank <- read.table("../inputdata/all.tax.rank_mp4.tab", row.names = 1, header = 1)
+
+library(RColorBrewer)
+library(circlize)
+library(reshape2)
+library(tidyverse)
+
+qdat <- dcast(qdat1, tax~group, value.var = "effect_size")
+pvalue <- dcast(qdat1, tax~group, value.var = "sign_p.value")
+pvalue1 <- dcast(qdat1, tax~group, value.var = "p.adjust")
+qdat2 <- qdat[,c(12,3,10,8,4,5,11,9,2)]
+
+rownames(qdat2) <- qdat[, 1]
+qdat2[pvalue[,c(12,3,10,8,4,5,11,9,2)] >0.05] <- 0
+qdat2 <- qdat2[apply(pvalue1, 1, function(x){any(x<0.05)}), ]
+
+lab <- dcast(qdat1, tax~group, value.var = "p.adjust")
+taxorder <- taxrank[rownames(qdat2), 2, drop=F]
+taxorder <- taxorder[order(taxorder$V2),,drop=F ]
+
+qdat3 <- -qdat2[rownames(taxorder),]
+colnames(qdat3) <- c("Plac_D84", "Glip_D90", "Vild_D168", "Metf_D90",
+                     "Metf_D120", "Metf_D60", "BBR_D84", "Acar_D168", "Acar_D90")
+split <- taxorder[,1]
+
+lab <- lab %>% column_to_rownames(var = "tax")
+lab <- lab[,colnames(qdat2)]
+colnames(lab) <- colnames(qdat3)
+lab <- apply(lab,2,function(x) ifelse(x<0.05,"*",""))
+lab <- lab[rownames(qdat3),]
+
+nameid <- substr(rownames(qdat3), 1, 30)
+nameid[nameid == "Clostridiaceae_bacterium_Marse"] <- paste0("Clostridiaceae_bacterium_Marse", 1:4)
+
+rownames(qdat3) <- nameid
+circos.clear()
+
+pdf("../result/Figure1/Fig1e_species_mp4_adj_p.pdf", width = 7, height = 7)
+
+circos.par(gap.after = c(2, 2, 2, 12))
+col_fun1 = colorRamp2(c(-1, 0, 1), c("#003399", "white", "#FF9933"))
+circos.heatmap(qdat3, col = col_fun1, split = split, cluster = T, rownames.side = "inside",
+               #bg.border = "grey",
+               cell.border = "grey", 
+               bg.lwd = 2, 
+               bg.lty = 2, 
+               show.sector.labels = TRUE, 
+               track.height = 0.3, rownames.cex = 0.4)
+
+# circos.track(
+#   track.index = 1,
+#   panel.fun = function(x, y) {
+#     n = ncol(lab)
+#     for(yid in 1:n){
+#       if(CELL_META$sector.numeric.index==1){
+#         circos.text(CELL_META$row_order, 10-yid, adj = c(1.5,0.5), lab[1:11,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==2){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[12:59,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==3){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[60:62,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==4){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[63:275,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==5){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[276:287,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==6){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[288,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#       if(CELL_META$sector.numeric.index==7){
+#         circos.text(CELL_META$row_order, 10-yid-1, adj = c(1.5,0.5), lab[289,yid],facing = "bending.inside", niceFacing = TRUE)
+#       }
+#     }
+#   }, bg.border = NA)
+
+circos.track(track.index = get.current.track.index(), panel.fun = function(x, y) {
+  if(CELL_META$sector.numeric.index == 4) { # the last sector
+    cn = rev(colnames(qdat3))
+    n = length(cn)
+    circos.text(rep(CELL_META$cell.xlim[2], n) + convert_x(1, "mm"),
+                1:n - 0.5, cn,
+                cex = 0.5, adj = c(0, 0.5), facing = "inside")
+  }
+}, bg.border = NA)
+
+library(ComplexHeatmap)
+lgd = Legend(title = "Effect size", col_fun = col_fun1)
+grid.draw(lgd)
+dev.off()
+
 ## Fig1F function compare
 source("../script/fun.R")
 library(ggplot2)
